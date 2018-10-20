@@ -18,24 +18,21 @@ FROM ubuntu:latest
 # - build deps (libs)
 # Cleanup unused packages
 # Clean apt cache
-# Remove downloaded lists
+
 RUN apt-get update && \
   apt-get install -y \
     wget bzip2 \
     gcc g++ \
     make bison flex texinfo file \
-    libgmp-dev libmpfr-dev libcloog-isl-dev libmpc-dev
-
-RUN apt-get install -yy xz-utils
+    libgmp-dev libmpfr-dev libcloog-isl-dev libmpc-dev xz-utils
 
 COPY build/ /build/
 
-RUN /build/get-src.sh
-RUN /build/extract-src.sh
-
-RUN /build/build-binutils.sh
-RUN /build/build-gcc.sh
-RUN rm -rf /build && \
+RUN /build/get-src.sh && \
+ /build/extract-src.sh && \
+ /build/build-binutils.sh && \
+ /build/build-gcc.sh && \
+ rm -rf /build && \
   apt-get purge -y \
     wget bzip2 \
     make bison flex texinfo \
