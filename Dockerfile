@@ -1,10 +1,8 @@
 # Set up gcc5 for cross-compiling
 
-FROM ubuntu:15.10
-
+FROM ubuntu:latest
 
 # Copy build scripts
-COPY build/ /build/
 # Ok, so this is one step because it saves a *lot* of disk space, so I'll go over it here:
 # Install deps:
 # - Source-getting deps
@@ -25,15 +23,22 @@ RUN apt-get update && \
   apt-get install -y \
     wget bzip2 \
     gcc g++ \
-    make bison flex texinfo \
-    libgmp-dev libmpfr-dev libisl-dev libcloog-isl-dev libmpc-dev && \
-  /build/get-src.sh && /build/extract-src.sh && \
-  /build/build-binutils.sh && /build/build-gcc.sh && \
-  rm -rf /build && \
+    make bison flex texinfo file \
+    libgmp-dev libmpfr-dev libcloog-isl-dev libmpc-dev
+
+RUN apt-get install -yy xz-utils
+
+COPY build/ /build/
+
+RUN /build/get-src.sh
+RUN /build/extract-src.sh
+
+RUN /build/build-binutils.sh
+RUN /build/build-gcc.sh
+RUN rm -rf /build && \
   apt-get purge -y \
     wget bzip2 \
     make bison flex texinfo \
     libgmp-dev libmpfr-dev libisl-dev libcloog-isl-dev libmpc-dev && \
   apt-get autoremove -y && \
-  apt-get clean && \
-  rm -rf /var/lib/apt/lists/*
+  apt-get clean
