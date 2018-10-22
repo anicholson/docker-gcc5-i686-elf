@@ -24,7 +24,7 @@ RUN apt-get update && \
     wget bzip2 \
     gcc g++ \
     make bison flex texinfo file \
-    libgmp-dev libmpfr-dev libcloog-isl-dev libmpc-dev xz-utils
+    libgmp-dev libmpfr-dev libcloog-isl-dev libmpc-dev xz-utils bash
 
 COPY build/ /build/
 
@@ -34,8 +34,7 @@ RUN /build/get-src.sh && \
  /build/build-gcc.sh && \
  rm -rf /build && \
   apt-get purge -y \
-    wget bzip2 \
-    make bison flex texinfo \
+    make bison flex \
     libgmp-dev libmpfr-dev libisl-dev libcloog-isl-dev libmpc-dev && \
   apt-get autoremove -y && \
   apt-get clean
